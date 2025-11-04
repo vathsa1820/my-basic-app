@@ -84,7 +84,7 @@ Works perfectly on:
 
 ## 🚀 Quick Start
 
-No installation required! Simply visit the [live site](https://chaithrarkaval99-debug.github.io/Healthcore/) and start exploring healthcare options.
+No installation required! Simply visit the [live site](https://vathsa1820.github.io/Rural-Mind-Connect./) and start exploring healthcare options.
 
 ## 📞 Support
 
