@@ -459,6 +459,135 @@
             flex-wrap: wrap;
         }
 
+        /* Video Call Styles */
+        .video-call-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            background-color: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .video-call-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .video-controls {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .video-control-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .video-control-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .video-control-btn.end-call {
+            background-color: var(--danger);
+        }
+
+        .video-control-btn.end-call:hover {
+            background-color: #c82333;
+        }
+
+        .call-info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        .call-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        /* Feedback Styles */
+        .feedback-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .feedback-item {
+            padding: 15px;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .feedback-rating {
+            color: #ffc107;
+        }
+
+        .feedback-date {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        .feedback-content {
+            margin-bottom: 8px;
+        }
+
+        .feedback-response {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-size: 0.9rem;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 5px;
+            margin: 10px 0;
+        }
+
+        .star {
+            font-size: 1.5rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star.active {
+            color: #ffc107;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .features-grid {
@@ -472,6 +601,10 @@
             .btn {
                 width: 100%;
                 justify-content: center;
+            }
+
+            .video-call-container {
+                height: 300px;
             }
         }
     </style>
@@ -595,6 +728,22 @@
                     <h3 class="feature-title">NightCare</h3>
                     <p class="muted">24/7 emergency support</p>
                 </div>
+
+                <div class="feature-card" onclick="openVideoConsultation()">
+                    <div class="feature-icon">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h3 class="feature-title">Video Consultation</h3>
+                    <p class="muted">Connect with doctors via video call</p>
+                </div>
+
+                <div class="feature-card" onclick="openFeedback()">
+                    <div class="feature-icon">
+                        <i class="fas fa-comment-medical"></i>
+                    </div>
+                    <h3 class="feature-title">Feedback</h3>
+                    <p class="muted">Share your experience with us</p>
+                </div>
             </div>
         </section>
 
@@ -639,12 +788,28 @@
                         <div class="doctor-card">
                             <div class="doctor-name">Dr. Aren Sharma</div>
                             <div class="muted">General Physician • 15 years experience</div>
-                            <button class="btn btn-small" onclick="selectDoctor('Dr. Aren Sharma')" style="margin-top: 8px;">Select</button>
+                            <div class="action-buttons">
+                                <button class="btn btn-small" onclick="selectDoctor('Dr. Aren Sharma')">Select</button>
+                                <button class="btn btn-small btn-secondary" onclick="startVideoCall('Dr. Aren Sharma')">
+                                    <i class="fas fa-video"></i> Video Call
+                                </button>
+                                <button class="btn btn-small btn-secondary" onclick="startAudioCall('Dr. Aren Sharma')">
+                                    <i class="fas fa-phone"></i> Audio Call
+                                </button>
+                            </div>
                         </div>
                         <div class="doctor-card">
                             <div class="doctor-name">Dr. Priya Mehta</div>
                             <div class="muted">Pediatrician • 10 years experience</div>
-                            <button class="btn btn-small" onclick="selectDoctor('Dr. Priya Mehta')" style="margin-top: 8px;">Select</button>
+                            <div class="action-buttons">
+                                <button class="btn btn-small" onclick="selectDoctor('Dr. Priya Mehta')">Select</button>
+                                <button class="btn btn-small btn-secondary" onclick="startVideoCall('Dr. Priya Mehta')">
+                                    <i class="fas fa-video"></i> Video Call
+                                </button>
+                                <button class="btn btn-small btn-secondary" onclick="startAudioCall('Dr. Priya Mehta')">
+                                    <i class="fas fa-phone"></i> Audio Call
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -845,6 +1010,128 @@
                     <button class="btn btn-small" onclick="startTelemedicine()" style="margin-top: 8px;">
                         <i class="fas fa-video"></i> Start Consultation
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Video Consultation -->
+    <div class="modal" id="video-consultation-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Video Consultation</h3>
+                <button class="close-modal" onclick="closeModal('video-consultation-modal')">&times;</button>
+            </div>
+            <div id="video-consultation-content">
+                <div class="form-group">
+                    <label for="consultation-doctor">Select Doctor</label>
+                    <select id="consultation-doctor">
+                        <option value="dr-aren">Dr. Aren Sharma (General Physician)</option>
+                        <option value="dr-priya">Dr. Priya Mehta (Pediatrician)</option>
+                        <option value="dr-raj">Dr. Raj Patel (Cardiologist)</option>
+                    </select>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn" onclick="startVideoCall()">
+                        <i class="fas fa-video"></i> Start Video Call
+                    </button>
+                    <button class="btn btn-secondary" onclick="startAudioCall()">
+                        <i class="fas fa-phone"></i> Start Audio Call
+                    </button>
+                </div>
+                
+                <div class="doctor-card" style="margin-top: 15px;">
+                    <div class="doctor-name">Upcoming Appointments</div>
+                    <div class="muted">You have an appointment with Dr. Priya Mehta tomorrow at 10:00 AM</div>
+                    <button class="btn btn-small" onclick="joinScheduledCall()" style="margin-top: 8px;">
+                        <i class="fas fa-video"></i> Join Scheduled Call
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Video/Audio Call -->
+    <div class="modal" id="call-modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="call-title">Video Call</h3>
+                <button class="close-modal" onclick="endCall()">&times;</button>
+            </div>
+            <div id="call-content">
+                <div class="video-call-container">
+                    <div class="call-info" id="call-info">Calling Dr. Aren Sharma...</div>
+                    <div class="call-status" id="call-status">00:30</div>
+                    <video id="local-video" autoplay muted></video>
+                    <video id="remote-video" autoplay></video>
+                    
+                    <div class="video-controls">
+                        <button class="video-control-btn" id="mute-audio" onclick="toggleAudio()">
+                            <i class="fas fa-microphone"></i>
+                        </button>
+                        <button class="video-control-btn" id="mute-video" onclick="toggleVideo()">
+                            <i class="fas fa-video"></i>
+                        </button>
+                        <button class="video-control-btn end-call" onclick="endCall()">
+                            <i class="fas fa-phone-slash"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="openChatDuringCall()">
+                        <i class="fas fa-comment"></i> Chat
+                    </button>
+                    <button class="btn btn-secondary" onclick="shareScreen()">
+                        <i class="fas fa-desktop"></i> Share Screen
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Feedback -->
+    <div class="modal" id="feedback-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Share Your Feedback</h3>
+                <button class="close-modal" onclick="closeModal('feedback-modal')">&times;</button>
+            </div>
+            <div id="feedback-content">
+                <div class="form-group">
+                    <label for="feedback-type">Feedback Type</label>
+                    <select id="feedback-type">
+                        <option value="general">General Feedback</option>
+                        <option value="doctor">Doctor Consultation</option>
+                        <option value="medicine">Medicine Delivery</option>
+                        <option value="app">App Experience</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Rating</label>
+                    <div class="star-rating" id="star-rating">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="feedback-message">Your Feedback</label>
+                    <textarea id="feedback-message" rows="4" placeholder="Tell us about your experience..."></textarea>
+                </div>
+                
+                <button class="btn" onclick="submitFeedback()" style="width: 100%;">
+                    <i class="fas fa-paper-plane"></i> Submit Feedback
+                </button>
+                
+                <div class="feedback-container" id="previous-feedback" style="margin-top: 20px; display: none;">
+                    <h3>Your Previous Feedback</h3>
+                    <div id="feedback-list"></div>
                 </div>
             </div>
         </div>
@@ -1147,6 +1434,233 @@
 
         function startTelemedicine() {
             alert('Connecting you with an available doctor...');
+        }
+
+        // ==================== VIDEO/AUDIO CALL FEATURES ====================
+        function openVideoConsultation() {
+            openModal('video-consultation-modal');
+        }
+
+        let callInterval;
+        let callSeconds = 0;
+        let isVideoCall = true;
+        let isAudioMuted = false;
+        let isVideoMuted = false;
+
+        function startVideoCall(doctorName) {
+            isVideoCall = true;
+            const doctor = doctorName || document.getElementById('consultation-doctor').options[document.getElementById('consultation-doctor').selectedIndex].text;
+            
+            document.getElementById('call-title').textContent = 'Video Call - ' + doctor;
+            document.getElementById('call-info').textContent = 'Calling ' + doctor + '...';
+            
+            openModal('call-modal');
+            
+            // Simulate call connection
+            setTimeout(() => {
+                document.getElementById('call-info').textContent = 'Connected to ' + doctor;
+                startCallTimer();
+                
+                // In a real app, we would initialize WebRTC here
+                // For this demo, we'll just show a placeholder
+                document.getElementById('local-video').style.display = 'block';
+                document.getElementById('remote-video').style.display = 'block';
+            }, 2000);
+        }
+
+        function startAudioCall(doctorName) {
+            isVideoCall = false;
+            const doctor = doctorName || document.getElementById('consultation-doctor').options[document.getElementById('consultation-doctor').selectedIndex].text;
+            
+            document.getElementById('call-title').textContent = 'Audio Call - ' + doctor;
+            document.getElementById('call-info').textContent = 'Calling ' + doctor + '...';
+            
+            openModal('call-modal');
+            
+            // Hide video elements for audio call
+            document.getElementById('local-video').style.display = 'none';
+            document.getElementById('remote-video').style.display = 'none';
+            
+            // Simulate call connection
+            setTimeout(() => {
+                document.getElementById('call-info').textContent = 'Connected to ' + doctor;
+                startCallTimer();
+            }, 2000);
+        }
+
+        function startCallTimer() {
+            callSeconds = 0;
+            updateCallTimer();
+            
+            callInterval = setInterval(() => {
+                callSeconds++;
+                updateCallTimer();
+            }, 1000);
+        }
+
+        function updateCallTimer() {
+            const minutes = Math.floor(callSeconds / 60);
+            const seconds = callSeconds % 60;
+            document.getElementById('call-status').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function toggleAudio() {
+            isAudioMuted = !isAudioMuted;
+            const button = document.getElementById('mute-audio');
+            
+            if (isAudioMuted) {
+                button.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                button.style.backgroundColor = 'var(--danger)';
+            } else {
+                button.innerHTML = '<i class="fas fa-microphone"></i>';
+                button.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+            }
+        }
+
+        function toggleVideo() {
+            if (!isVideoCall) return;
+            
+            isVideoMuted = !isVideoMuted;
+            const button = document.getElementById('mute-video');
+            
+            if (isVideoMuted) {
+                button.innerHTML = '<i class="fas fa-video-slash"></i>';
+                button.style.backgroundColor = 'var(--danger)';
+                document.getElementById('local-video').style.display = 'none';
+            } else {
+                button.innerHTML = '<i class="fas fa-video"></i>';
+                button.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                document.getElementById('local-video').style.display = 'block';
+            }
+        }
+
+        function endCall() {
+            clearInterval(callInterval);
+            closeModal('call-modal');
+            
+            // Show feedback modal after call ends
+            setTimeout(() => {
+                openFeedback();
+            }, 1000);
+        }
+
+        function openChatDuringCall() {
+            alert('Opening chat window during call...');
+        }
+
+        function shareScreen() {
+            alert('Starting screen sharing...');
+        }
+
+        function joinScheduledCall() {
+            alert('Joining your scheduled call with Dr. Priya Mehta...');
+            startVideoCall('Dr. Priya Mehta');
+        }
+
+        // ==================== FEEDBACK SYSTEM ====================
+        function openFeedback() {
+            openModal('feedback-modal');
+            loadPreviousFeedback();
+            initializeStarRating();
+        }
+
+        function initializeStarRating() {
+            const stars = document.querySelectorAll('.star');
+            let currentRating = 0;
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    currentRating = parseInt(this.getAttribute('data-rating'));
+                    
+                    stars.forEach(s => {
+                        if (parseInt(s.getAttribute('data-rating')) <= currentRating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+            });
+        }
+
+        function submitFeedback() {
+            const type = document.getElementById('feedback-type').value;
+            const message = document.getElementById('feedback-message').value;
+            
+            // Get rating from active stars
+            const activeStars = document.querySelectorAll('.star.active');
+            const rating = activeStars.length;
+            
+            if (rating === 0) {
+                alert('Please provide a rating.');
+                return;
+            }
+            
+            if (!message.trim()) {
+                alert('Please provide feedback message.');
+                return;
+            }
+            
+            // Save feedback to localStorage
+            const feedback = {
+                type,
+                rating,
+                message,
+                date: new Date().toISOString()
+            };
+            
+            const session = getSession();
+            if (session && session.email) {
+                let userFeedback = JSON.parse(localStorage.getItem(`rmc_feedback_${session.email}`) || '[]');
+                userFeedback.push(feedback);
+                localStorage.setItem(`rmc_feedback_${session.email}`, JSON.stringify(userFeedback));
+            }
+            
+            alert('Thank you for your feedback!');
+            closeModal('feedback-modal');
+            
+            // Clear form
+            document.getElementById('feedback-message').value = '';
+            document.querySelectorAll('.star').forEach(star => {
+                star.classList.remove('active');
+            });
+        }
+
+        function loadPreviousFeedback() {
+            const session = getSession();
+            if (!session || !session.email) return;
+            
+            const userFeedback = JSON.parse(localStorage.getItem(`rmc_feedback_${session.email}`) || '[]');
+            
+            if (userFeedback.length > 0) {
+                document.getElementById('previous-feedback').style.display = 'block';
+                const feedbackList = document.getElementById('feedback-list');
+                feedbackList.innerHTML = '';
+                
+                userFeedback.forEach(feedback => {
+                    const feedbackItem = document.createElement('div');
+                    feedbackItem.className = 'feedback-item';
+                    
+                    const date = new Date(feedback.date).toLocaleDateString();
+                    
+                    let stars = '';
+                    for (let i = 1; i <= 5; i++) {
+                        stars += i <= feedback.rating ? '★' : '☆';
+                    }
+                    
+                    feedbackItem.innerHTML = `
+                        <div class="feedback-header">
+                            <div class="feedback-rating">${stars}</div>
+                            <div class="feedback-date">${date}</div>
+                        </div>
+                        <div class="feedback-content">${feedback.message}</div>
+                        <div class="muted">Type: ${feedback.type}</div>
+                    `;
+                    
+                    feedbackList.appendChild(feedbackItem);
+                });
+            }
         }
 
         // ==================== AUTHENTICATION ====================
