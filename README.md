@@ -4,7 +4,7 @@ A modern web application for finding healthcare specialists in rural areas with 
 
 ## 🚀 Live Demo
 
-[**View Live Site →**](https://chaithrarkaval99-debug.github.io/Healthcore/)
+[**View Live Site →**](https://vathsa1820.github.io/my-basic-app/)
 
 ## ✨ Features
 
